@@ -5,9 +5,9 @@ static CORRECT_ORDER: [i32; 16] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 static ROW: [i32; 16] = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
 static COLUMN: [i32; 16] = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Copy, Clone)]
 struct State {
-    moves: String,
+    moves: Vec<&'static str>,
     f: i32,
     h: i32,
 }
@@ -72,38 +72,38 @@ impl State {
     fn make_move(
         &self,
         order: &[i32; 16],
-        dir: fn(usize, [i32; 16]) -> ([i32; 16], String),
+        dir: fn(usize, [i32; 16]) -> ([i32; 16], &'static str),
     ) -> ([i32; 16], State) {
         let mut old_order = *order;
         let new_f = self.f + 1;
         let new_g = State::calc_g(order);
         let (new_order, from) = dir(State::find_index(&old_order, &0), *order);
         let new_state = State {
-            moves: format!("{}{}", self.moves, &from),
+            moves: slef.moves.push(from),
             f: new_f,
             h: new_f + new_g,
         };
         return (new_order, new_state);
     }
 
-    fn left(index: usize, mut order: [i32; 16]) -> ([i32; 16], String) {
+    fn left(index: usize, mut order: [i32; 16]) -> ([i32; 16], &'static str) {
         order.swap(index, index - 1);
-        return (order, String::from("l"));
+        return (order, "l");
     }
 
-    fn right(index: usize, mut order: [i32; 16]) -> ([i32; 16], String) {
+    fn right(index: usize, mut order: [i32; 16]) -> ([i32; 16], &'static str) {
         order.swap(index, index + 1);
-        return (order, String::from("r"));
+        return (order, "r");
     }
 
-    fn up(index: usize, mut order: [i32; 16]) -> ([i32; 16], String) {
+    fn up(index: usize, mut order: [i32; 16]) -> ([i32; 16], &'static str) {
         order.swap(index, index - 4);
-        return (order, String::from("u"));
+        return (order, "u");
     }
 
-    fn down(index: usize, mut order: [i32; 16]) -> ([i32; 16], String) {
+    fn down(index: usize, mut order: [i32; 16]) -> ([i32; 16], &'static str) {
         order.swap(index, index + 4);
-        return (order, String::from("d"));
+        return (order, "d");
     }
 
     fn children(&self, order: &[i32; 16]) -> Vec<([i32; 16], State)> {
