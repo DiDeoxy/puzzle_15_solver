@@ -9,8 +9,7 @@ static COLUMN: [i32; 16] = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
 struct State {
     est_tot_moves: u8,
     moves: String,
-    est_moves_rem: u8,
-    parent: State,
+    est_moves_rem: u8
 }
 
 impl PartialOrd for State {
@@ -143,12 +142,12 @@ fn main() {
                         break 'outer;
                     }
                     open_states.push(child_order, Reverse(child_state.clone()));
-                }
+                },
                 (Some(&Reverse(open_state)), None)
                     if open_state.moves.len() > child_state.moves.len() =>
                 {
                     open_states.set_priority(&child_order, Reverse(child_state.clone()));
-                }
+                },
                 // (None, Some(&Reverse(closed_state))) if closed_state.moves.len() > child_state.moves.len() => {
                 //     closed_states.remove_item(&child_order);
                 //     open_states.push(child_order, Reverse(child_state.clone()));
